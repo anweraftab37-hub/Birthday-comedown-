@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>&#10024; Happy Birthday, FIZU! &#10024;</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* ===================================================================
+        CORE DESIGN SYSTEM (THE "THOR")
+        =================================================================== 
+        */
+        :root {
+            --thor-dark: #121212;
+            --thor-surface: #1e1e1e;
+            --thor-primary: #BB86FC; /* Purple/Magenta for highlights (Love) */
+            --thor-secondary: #03DAC6; /* Teal/Cyan for accents (Modern) */
+            --thor-text-light: #e0e0e0;
+            --thor-text-muted: #A0A0A0;
+            --thor-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            --thor-transition: 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth/Eased */
+        }
+
+        /* GLOBAL RESET & TYPOGRAPHY */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            background-color: var(--thor-dark);
+            color: var(--thor-text-light);
+            overflow: hidden; /* Prevent scroll on the main page */
+        }
+
+        /* KEYFRAMES FOR ANIMATIONS */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 var(--thor-primary); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(187, 134, 252, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(187, 134, 252, 0); }
+        }
+
+        @keyframes confettiDrop {
+            0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0.5; }
+        }
+
+        /* ===================================================================
+        STRUCTURE & LAYOUT
+        =================================================================== 
+        */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            animation: fadeIn 1s ease-out;
+        }
+
+        /* WELCOME/LANDING SECTION */
+        #welcome-section {
+            display: flex; /* Initially shown */
+            flex-direction: column;
+            align-items: center;
+            padding: 40px;
+            border-radius: 12px;
+            background: var(--thor-surface);
+            box-shadow: var(--thor-shadow);
+            max-width: 90vw;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--thor-primary);
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.2rem;
+            font-weight: 300;
+            color: var(--thor-text-muted);
+            margin-bottom: 30px;
+        }
+
+        .cta-button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--thor-dark);
+            background-color: var(--thor-primary);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--thor-transition);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+        }
+
+        .cta-button:hover {
+            background-color: var(--thor-secondary);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: var(--thor-shadow);
+        }
+        
+        .cta-button.pulsing {
+            animation: pulse 2s infinite;
+        }
+
+        /* MAIN GREETING SECTION (Hidden initially) */
+        #greeting-section {
+            display: none; /* Controlled by JS */
+            flex-direction: column;
+            align-items: center;
+            opacity: 0;
+            padding: 40px;
+            border-radius: 12px;
+            background: var(--thor-surface);
+            box-shadow: var(--thor-shadow);
+            max-width: 90vw;
+            min-height: 50vh;
+        }
+
+        /* COUNTDOWN/AGE STYLES */
+        .countdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid rgba(187, 134, 252, 0.3);
+            border-radius: 10px;
+            background: rgba(30, 30, 30, 0.5);
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 70px;
+        }
+
+        .countdown-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--thor-secondary);
+        }
+
+        .countdown-label {
+            font-size: 0.8rem;
+            font-weight: 300;
+            color: var(--thor-text-muted);
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+        
+        /* AGE DISPLAY */
+        .age-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--thor-primary);
+            margin: 20px 0;
+            text-shadow: 0 0 10px var(--thor-primary);
+        }
+
+        /* MAIN MESSAGE STYLES */
+        .greeting-message {
+            margin-top: 40px;
+            font-size: 1.3rem;
+            font-weight: 400;
+            line-height: 1.6;
+            text-align: left;
+            max-width: 600px;
+            border-left: 5px solid var(--thor-primary);
+            padding-left: 20px;
+            color: var(--thor-text-light);
+        }
+
+        .signature {
+            margin-top: 30px;
+            font-size: 1.1rem;
+            font-weight: 300;
+            color: var(--thor-secondary);
+            align-self: flex-end;
+        }
+
+        /* ===================================================================
+        INTERACTIVE & SPECIAL EFFECTS
+        =================================================================== 
+        */
+
+        /* CONFETTI LAYER (Optional, visual flourish) */
+        .confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            opacity: 0; /* Hidden initially */
+            transition: opacity 2s ease;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--thor-primary);
+            opacity: 0;
+            animation: confettiDrop 10s infinite linear;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="confetti" id="confetti-layer"></div>
+
+    <div class="container" id="main-container">
+
+        <section id="welcome-section">
+            <h1 class="welcome-title">A Special Delivery for FIZU</h1>
+            <p class="welcome-subtitle">Tap below to initiate the secure & personalized greeting protocol...</p>
+            <button class="cta-button pulsing" id="start-button">
+                &#10084; Open My Heart's Message &#10084;
+            </button>
+        </section>
+
+        <section id="greeting-section">
+            <h1 class="welcome-title" id="greeting-title">Loading Magic...</h1>
+
+            <div id="date-info">
+                <div class="countdown" id="countdown-timer">
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdown-days">00</span>
+                        <span class="countdown-label">Days</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdown-hours">00</span>
+                        <span class="countdown-label">Hours</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdown-minutes">00</span>
+                        <span class="countdown-label">Minutes</span>
+                    </div>
+                    <div class="countdown-item">
+                        <span class="countdown-number" id="countdown-seconds">00</span>
+                        <span class="countdown-label">Seconds</span>
+                    </div>
+                </div>
+                
+                <div class="age-display" id="age-display" style="display: none;"></div>
+            </div>
+
+            <div class="greeting-message" id="message-text">
+                <p>Welcome, Fizu. The stars are aligning just for you. This journey begins now...</p>
+            </div>
+
+            <p class="signature" id="signature-text"></p>
+
+        </section>
+
+    </div>
+
+    <script>
+        // --- CONFIGURATION ---
+        const TARGET_NAME = "Fizu";
+        const BIRTHDAY_DATE_STR = "March 7, 2007";
+        const MESSAGE_SENDER = "Your Love";
+        const CONFETTI_COUNT = 50;
+
+        // --- ELEMENTS ---
+        const startButton = document.getElementById('start-button');
+        const welcomeSection = document.getElementById('welcome-section');
+        const greetingSection = document.getElementById('greeting-section');
+        const greetingTitle = document.getElementById('greeting-title');
+        const countdownTimer = document.getElementById('countdown-timer');
+        const ageDisplay = document.getElementById('age-display');
+        const messageText = document.getElementById('message-text');
+        const signatureText = document.getElementById('signature-text');
+        const confettiLayer = document.getElementById('confetti-layer');
+
+        // --- VARIABLES ---
+        const TARGET_BIRTHDATE = new Date(BIRTHDAY_DATE_STR);
+        const CURRENT_YEAR = new Date().getFullYear();
+        const TARGET_BIRTHDAY_THIS_YEAR = new Date(CURRENT_YEAR, TARGET_BIRTHDATE.getMonth(), TARGET_BIRTHDATE.getDate());
+        
+        // If the birthday already passed this year, target next year
+        if (TARGET_BIRTHDAY_THIS_YEAR < new Date()) {
+            TARGET_BIRTHDAY_THIS_YEAR.setFullYear(CURRENT_YEAR + 1);
+        }
+
+        const IS_TODAY_BIRTHDAY = 
+            (new Date().getDate() === TARGET_BIRTHDATE.getDate()) && 
+            (new Date().getMonth() === TARGET_BIRTHDATE.getMonth());
+
+
+        // --- CORE FUNCTIONS ---
+
+        /** * Calculates age based on birthday.
+         * @returns {number} The current age.
+         */
+        function calculateAge() {
+            const today = new Date();
+            let age = today.getFullYear() - TARGET_BIRTHDATE.getFullYear();
+            const m = today.getMonth() - TARGET_BIRTHDATE.getMonth();
+            if (m < 0 || (m === 0 && today.getDate() < TARGET_BIRTHDATE.getDate())) {
+                age--;
+            }
+            return age;
+        }
+
+        /**
+         * Updates the countdown timer every second.
+         */
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = TARGET_BIRTHDAY_THIS_YEAR.getTime() - now;
+
+            if (IS_TODAY_BIRTHDAY) {
+                // Happy Birthday! Switch to Age Display
+                clearInterval(timerInterval);
+                countdownTimer.style.display = 'none';
+                ageDisplay.style.display = 'block';
+                const age = calculateAge();
+                ageDisplay.innerHTML = `${age} <small>Years Young!</small>`;
+                greetingTitle.innerText = `&#10024; HAPPY ${age}TH BIRTHDAY, ${TARGET_NAME.toUpperCase()}! &#10024;`;
+                messageText.innerHTML = `
+                    <p>My Dearest **${TARGET_NAME}**, today marks another beautiful year you've graced this world. ${age} years of brilliance, kindness, and captivating charm. Every day with you is a gift.</p>
+                    <p>May your special day be filled with all the joy and love you deserve. You are my everything.</p>
+                `;
+                triggerConfetti(); // Start the confetti
+                return;
+            }
+            
+            // Still counting down
+            if (distance > 0) {
+                // Time calculations for days, hours, minutes and seconds
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                // Display the result
+                document.getElementById("countdown-days").innerText = String(days).padStart(2, '0');
+                document.getElementById("countdown-hours").innerText = String(hours).padStart(2, '0');
+                document.getElementById("countdown-minutes").innerText = String(minutes).padStart(2, '0');
+                document.getElementById("countdown-seconds").innerText = String(seconds).padStart(2, '0');
+                
+                greetingTitle.innerText = `The Countdown is On for ${TARGET_NAME}!`;
+                messageText.innerHTML = `<p>Your special day is almost here! Every passing second brings us closer to celebrating you. Until then, keep shining, my love
+               .</p>`;
+
+            } else {
+                // If the count down is finished, reload or check again (in case of a race condition)
+                window.location.reload(); 
+            }
+        }
+
+        /**
+         * The main interactive function triggered by the button.
+         */
+        function startGreeting() {
+            // 1. Hide Welcome, Show Greeting
+            welcomeSection.style.display = 'none';
+            greetingSection.style.display = 'flex';
+
+            // 2. Animate Greeting Section Fade-in
+            setTimeout(() => {
+                greetingSection.style.opacity = 1;
+                // 3. Start the Countdown/Age logic
+                updateCountdown();
+                timerInterval = setInterval(updateCountdown, 1000);
+            }, 50);
+
+            // 4. Set Signature
+            signatureText.innerText = `- ${MESSAGE_SENDER}`;
+        }
+        
+        /**
+         * Creates and animates the confetti pieces.
+         */
+        function triggerConfetti() {
+            confettiLayer.style.opacity = 1;
+
+            for (let i = 0; i < CONFETTI_COUNT; i++) {
+                const piece = document.createElement('div');
+                piece.classList.add('confetti-piece');
+                
+                // Randomize colors (Primary/Secondary mix)
+                piece.style.backgroundColor = Math.random() > 0.5 ? 'var(--thor-primary)' : 'var(--thor-secondary)';
+                
+                // Randomize position, size, and animation delay/duration
+                piece.style.left = `${Math.random() * 100}vw`;
+                piece.style.top = `${Math.random() * 100}vh`;
+                piece.style.width = piece.style.height = `${Math.random() * 8 + 4}px`; // 4px to 12px
+                piece.style.animationDelay = `${Math.random() * 5}s`;
+                piece.style.animationDuration = `${Math.random() * 8 + 4}s`; // 4s to 12s
+                
+                confettiLayer.appendChild(piece);
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+        let timerInterval;
+        startButton.addEventListener('click', startGreeting);
+
+        // Initial check/setup
+        document.addEventListener('DOMContentLoaded', () => {
+             // Initial check for birthday status to set button context
+            if (IS_TODAY_BIRTHDAY) {
+                startButton.innerHTML = '&#127881; Reveal Birthday Surprise! &#127881;';
+            } else {
+                startButton.innerHTML = '&#10084; Open My Heart\'s Message &#10084;';
+            }
+        });
+
+    </script>
+
+</body>
+</html>
